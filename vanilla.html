@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Angle Selector</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <input type="text" id="angleInput" value="0">
+        <input type="range" id="angleSlider" min="0" max="360" value="0">
+        <div class="radio-group">
+            <label><input type="radio" name="anglePreset" value="0"> 0°</label>
+            <label><input type="radio" name="anglePreset" value="45"> 45°</label>
+            <label><input type="radio" name="anglePreset" value="60"> 60°</label>
+            <label><input type="radio" name="anglePreset" value="90"> 90°</label>
+            <label><input type="radio" name="anglePreset" value="180"> 180°</label>
+        </div>
+    </div>
+
+    <script>
+        const angleInput = document.getElementById('angleInput');
+        const angleSlider = document.getElementById('angleSlider');
+        const radioButtons = document.querySelectorAll('input[name="anglePreset"]');
+
+        function updateAngle(value) {
+            // Ensure the value is between 0 and 360
+            value = ((value % 360) + 360) % 360;
+
+            // Update text input
+            angleInput.value = value;
+
+            // Update slider
+            angleSlider.value = value;
+
+            // Update radio buttons
+            radioButtons.forEach(radio => {
+                radio.checked = (parseInt(radio.value) === value);
+            });
+        }
+
+        // Text input event listener
+        angleInput.addEventListener('input', (e) => {
+            let value = parseFloat(e.target.value);
+            if (!isNaN(value)) {
+                updateAngle(value);
+            }
+        });
+
+        // Slider event listener
+        angleSlider.addEventListener('input', (e) => {
+            updateAngle(parseInt(e.target.value));
+        });
+
+        // Radio buttons event listener
+        radioButtons.forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    updateAngle(parseInt(e.target.value));
+                }
+            });
+        });
+
+        // Initialize to 0
+        updateAngle(0);
+    </script>
+</body>
+
+</html>
