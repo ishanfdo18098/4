@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Angle Selector - React</title>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .radio-group {
+            display: flex;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const AngleSelector = () => {
+            const [angle, setAngle] = React.useState(0);
+
+            const updateAngle = (value) => {
+                value = ((value % 360) + 360) % 360;
+                setAngle(value);
+            };
+
+            const handleInputChange = (e) => {
+                const value = parseFloat(e.target.value);
+                if (!isNaN(value)) {
+                    updateAngle(value);
+                }
+            };
+
+            const handleSliderChange = (e) => {
+                updateAngle(parseInt(e.target.value));
+            };
+
+            const handleRadioChange = (e) => {
+                updateAngle(parseInt(e.target.value));
+            };
+
+            const presetAngles = [0, 45, 60, 90, 180];
+
+            return (
+                <div className="container">
+                    <input
+                        type="text"
+                        value={angle}
+                        onChange={handleInputChange}
+                    />
+                    <input
+                        type="range"
+                        min="0"
+                        max="360"
+                        value={angle}
+                        onChange={handleSliderChange}
+                    />
+                    <div className="radio-group">
+                        {presetAngles.map((preset) => (
+                            <label key={preset}>
+                                <input
+                                    type="radio"
+                                    name="anglePreset"
+                                    value={preset}
+                                    checked={angle === preset}
+                                    onChange={handleRadioChange}
+                                />
+                                {preset}°
+                            </label>
+                        ))}
+                    </div>
+                </div>
+            );
+        };
+
+        ReactDOM.render(<AngleSelector />, document.getElementById('root'));
+    </script>
+</body>
+</html>
